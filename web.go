@@ -8,13 +8,13 @@ import (
 )
 
 type WebStatus struct {
-	Url    string
-	Status int
-	Err    string
-    CertFrom time.Time
-    CertTo time.Time
-    CertDaysHave int
-    IsSSL bool
+	Url          string
+	Status       int
+	Err          string
+	CertFrom     time.Time
+	CertTo       time.Time
+	CertDaysHave int
+	IsSSL        bool
 }
 
 func checkSite(url string) WebStatus {
@@ -61,19 +61,19 @@ func checkSite(url string) WebStatus {
 	defer resp.Body.Close()
 
 	webStatus.Status = resp.StatusCode
-    webStatus.IsSSL = false
-    if resp.TLS != nil {
-        webStatus.IsSSL = true
-        webStatus.CertFrom , webStatus.CertTo, webStatus.CertDaysHave = GetCertInfo(resp)
-    }
-    
+	webStatus.IsSSL = false
+	if resp.TLS != nil {
+		webStatus.IsSSL = true
+		webStatus.CertFrom, webStatus.CertTo, webStatus.CertDaysHave = GetCertInfo(resp)
+	}
+
 	return webStatus
 }
 
 // Получить информацию о сертификате
-func GetCertInfo(resp *http.Response) (tStart, tEnd time.Time, daysRest int)  { 
-    loc, _ := time.LoadLocation("UTC")
-    now := time.Now().In(loc)
-    diff := resp.TLS.PeerCertificates[0].NotAfter.Sub(now)
-    return resp.TLS.PeerCertificates[0].NotBefore, resp.TLS.PeerCertificates[0].NotAfter, int(diff.Hours() / 24)
+func GetCertInfo(resp *http.Response) (tStart, tEnd time.Time, daysRest int) {
+	loc, _ := time.LoadLocation("UTC")
+	now := time.Now().In(loc)
+	diff := resp.TLS.PeerCertificates[0].NotAfter.Sub(now)
+	return resp.TLS.PeerCertificates[0].NotBefore, resp.TLS.PeerCertificates[0].NotAfter, int(diff.Hours() / 24)
 }
