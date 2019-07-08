@@ -1,6 +1,0 @@
-### Create project
-dep init
-
-### Run
-go run main.go web.go config.go
-go run *.go
