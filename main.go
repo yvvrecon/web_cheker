@@ -36,7 +36,7 @@ func main() {
 		select {
 		case webStatus, ok := <-chRez:
 			if ok {
-                    printStatusHttp(webStatus)
+				printStatusHttp(webStatus)
 				if webStatus.Err != "" {
 					log.Println("Send email alarm")
 					sendEmailGmail(config, webStatus.Url)
@@ -88,13 +88,12 @@ func workerGen(in <-chan string) chan WebStatus {
 	return out
 }
 
-
 func printStatusHttp(ws WebStatus) {
-    if ws.IsSSL {
-        log.Printf("processed: %s, status:%d, %d days, %s", ws.Url, 
-        ws.Status, ws.CertDaysHave, ws.Err)
-    } else {
-        log.Printf("processed: %s, status:%d, %s", ws.Url, 
-        ws.Status, ws.Err)
-    }
+	if ws.IsSSL {
+		log.Printf("processed: %s, status:%d, %d days, %s", ws.Url,
+			ws.Status, ws.CertDaysHave, ws.Err)
+	} else {
+		log.Printf("processed: %s, status:%d, %s", ws.Url,
+			ws.Status, ws.Err)
+	}
 }
